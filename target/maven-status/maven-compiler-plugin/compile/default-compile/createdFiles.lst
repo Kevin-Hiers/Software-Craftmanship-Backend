@@ -1,0 +1,5 @@
+be/ucll/service/ThreatIntelService.class
+be/ucll/Application.class
+be/ucll/controller/ThreatIntelRestController.class
+be/ucll/repository/ThreatIntelRepository.class
+be/ucll/repository/DbInitializer.class
