@@ -4,12 +4,13 @@ import java.util.*;
 
 public class Group {
     private final UUID id;
-    private final List<User> users;
+    private final Set<UUID> userIds;
     private final List<Proposal> proposals;
 
     public Group(UUID id) {
-        this.id = Objects.requireNonNull(id, "id is required");
-        this.users = new ArrayList<>();
+        if (id == null) throw new IllegalArgumentException("id required");
+        this.id = id;
+        this.userIds = new HashSet<>();
         this.proposals = new ArrayList<>();
     }
 
@@ -18,36 +19,30 @@ public class Group {
     }
 
     public UUID getId() { return id; }
-    public List<User> getUsers() { return List.copyOf(users); }
+    public Set<UUID> getUserIds() { return Set.copyOf(userIds); }
     public List<Proposal> getProposals() { return List.copyOf(proposals); }
 
-    public void addUser(User user) {
-        Objects.requireNonNull(user, "user is required");
-        boolean exists = users.stream().anyMatch(u ->
-                u.getUsername().equalsIgnoreCase(user.getUsername())
-                        || u.getEmail().equalsIgnoreCase(user.getEmail())
-        );
-        if (exists) throw new IllegalStateException("user already exists in group");
-        users.add(user);
+    public void addUser(UUID userId) {
+        if (userId == null) throw new IllegalArgumentException("userId required");
+        if (!userIds.add(userId)) throw new IllegalStateException("user already in group");
     }
 
-    public Proposal proposeRecipe(Recipe recipe) {
-        Objects.requireNonNull(recipe, "recipe is required");
-        var proposal = Proposal.of(recipe);
-        proposals.add(proposal);
-        return proposal;
+    public Proposal proposeRecipe(UUID recipeId) {
+        if (recipeId == null) throw new IllegalArgumentException("recipeId required");
+        var p = Proposal.forRecipe(recipeId);
+        proposals.add(p);
+        return p;
     }
 
     public Proposal voteFor(UUID proposalId) {
-        Objects.requireNonNull(proposalId, "proposalId is required");
         for (int i = 0; i < proposals.size(); i++) {
-            Proposal p = proposals.get(i);
+            var p = proposals.get(i);
             if (p.id().equals(proposalId)) {
-                Proposal updated = p.upvote();
+                var updated = p.upvote();
                 proposals.set(i, updated);
                 return updated;
             }
         }
-        throw new NoSuchElementException("proposal not found: " + proposalId);
+        throw new NoSuchElementException("proposal not found");
     }
 }
