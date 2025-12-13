@@ -1,12 +1,14 @@
 package be.ucll.chappl.groups.infrastructure;
 
 import be.ucll.chappl.groups.domain.Group;
+import org.springframework.stereotype.Repository;
 
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Repository
 public class InMemoryGroupRepository implements GroupRepository {
     private final Map<UUID, Group> store = new ConcurrentHashMap<>();
 
