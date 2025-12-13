@@ -1,6 +1,7 @@
 package be.ucll.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -22,10 +23,8 @@ public class Recipe {
     private Boolean isPublic;
 
     @ElementCollection
-    @CollectionTable(
-            name = "recipe_steps",
-            joinColumns = @JoinColumn(name = "recipe_id")
-    )
+    @CollectionTable(name = "recipe_steps", joinColumns = @JoinColumn(name = "recipe_id"))
+    @Valid
     private List<Step> steps = new ArrayList<>();
 
     public Recipe() {}

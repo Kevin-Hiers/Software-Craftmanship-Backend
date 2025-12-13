@@ -1,29 +1,18 @@
 package be.ucll.model;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Embedded;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
-@Entity
-@Table(name = "ingredients")
-public class Ingredient {
+@Embeddable
+public record Ingredient(
+        @NotBlank(message = "Ingredient name cannot be empty")
+        String name,
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
-    @NotBlank(message = "Ingredient name cannot be empty")
-    @Column(nullable = false, unique = true)
-    private String name;
-
-    public Ingredient() {}
-
-    public Ingredient(String name) {
-        this.name = name;
-    }
-
-    public long getId() { return id; }
-    public void setId(long id) { this.id = id; }
-
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
-}
+        @NotNull(message = "Measurement cannot be null")
+        @Valid
+        @Embedded
+        Measurement measurement
+) {}

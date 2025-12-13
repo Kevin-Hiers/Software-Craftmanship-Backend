@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,8 +19,8 @@ class StepModelTest {
 
     @Test
     void givenValidStep_whenValidate_thenNoViolations() {
-        Ingredient ingredient = new Ingredient("Tomato");
-        Step step = new Step(ingredient, "Chop the tomato.");
+        Ingredient ingredient = new Ingredient("Tomato", new Measurement(new BigDecimal("2"), "pcs"));
+        Step step = new Step(ingredient, "Chop the tomatoes.");
 
         Set<ConstraintViolation<Step>> violations = validator.validate(step);
 
@@ -40,7 +41,7 @@ class StepModelTest {
 
     @Test
     void givenBlankInstruction_whenValidate_thenInstructionViolation() {
-        Ingredient ingredient = new Ingredient("Tomato");
+        Ingredient ingredient = new Ingredient("Tomato", new Measurement(new BigDecimal("2"), "pcs"));
         Step step = new Step(ingredient, "   ");
 
         Set<ConstraintViolation<Step>> violations = validator.validate(step);
