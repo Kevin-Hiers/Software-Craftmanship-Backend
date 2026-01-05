@@ -1,0 +1,2 @@
+org.springframework.boot.env.EnvironmentPostProcessor=\
+be.ucll.chappl.config.DotenvEnvironmentPostProcessor

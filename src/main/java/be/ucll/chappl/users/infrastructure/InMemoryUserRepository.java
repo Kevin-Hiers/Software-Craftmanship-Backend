@@ -10,6 +10,21 @@ import java.util.concurrent.ConcurrentHashMap;
 public class InMemoryUserRepository implements UserRepository {
     private final Map<UUID, User> store = new ConcurrentHashMap<>();
 
-    @Override public void save(User user) { store.put(user.getId(), user); }
-    @Override public Optional<User> findById(UUID id) { return Optional.ofNullable(store.get(id)); }
+    @Override
+    public void save(User user) {
+        store.put(user.getId(), user);
+    }
+
+    @Override
+    public Optional<User> findById(UUID id) {
+        return Optional.ofNullable(store.get(id));
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return store.values().stream()
+                .filter(u -> u.getEmail().equalsIgnoreCase(email))
+                .findFirst();
+    }
+
 }

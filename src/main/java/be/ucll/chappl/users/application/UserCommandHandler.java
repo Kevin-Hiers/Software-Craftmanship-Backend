@@ -7,14 +7,18 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserCommandHandler {
-    private final UserRepository repo;
 
-    public UserCommandHandler(UserRepository repo) {
+    private final UserRepository repo;
+    private final PasswordHasher hasher;
+
+    public UserCommandHandler(UserRepository repo, PasswordHasher hasher) {
         this.repo = repo;
+        this.hasher = hasher;
     }
 
     public UserInformation handle(RegisterUserCommand cmd) {
-        var user = User.create(cmd.username(), cmd.email(), cmd.password());
+        var passwordHash = hasher.hash(cmd.password());
+        var user = User.create(cmd.username(), cmd.email(), passwordHash);
         repo.save(user);
         return UserInformation.from(user);
     }
