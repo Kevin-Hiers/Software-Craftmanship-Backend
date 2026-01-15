@@ -1,5 +1,6 @@
 package be.ucll.chappl.unit.users.application;
 
+import be.ucll.chappl.unit.support.FakePasswordHasher;
 import be.ucll.chappl.users.application.UserCommandHandler;
 import be.ucll.chappl.users.commands.RegisterUserCommand;
 import be.ucll.chappl.users.infrastructure.InMemoryUserRepository;
@@ -12,7 +13,7 @@ class UserCommandHandlerTest {
     @Test
     void givenValidRegisterCommand_whenHandled_thenUserIsCreatedAndStored() {
         var repo = new InMemoryUserRepository();
-        var handler = new UserCommandHandler(repo);
+        var handler = new UserCommandHandler(repo, new FakePasswordHasher());
 
         var cmd = new RegisterUserCommand("stefanie", "stefanie@ucll.be", "pw");
         var created = handler.handle(cmd);
@@ -21,5 +22,6 @@ class UserCommandHandlerTest {
         var loaded = repo.findById(created.id()).orElseThrow();
         assertEquals("stefanie", loaded.getUsername());
         assertEquals("stefanie@ucll.be", loaded.getEmail());
+        assertEquals("HASHED:pw", loaded.getPasswordHash());
     }
 }

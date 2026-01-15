@@ -6,6 +6,7 @@ import be.ucll.chappl.groups.infrastructure.InMemoryGroupRepository;
 import be.ucll.chappl.recipes.application.RecipeCommandHandler;
 import be.ucll.chappl.recipes.commands.CreateRecipeCommand;
 import be.ucll.chappl.recipes.infrastructure.InMemoryRecipeRepository;
+import be.ucll.chappl.unit.support.FakePasswordHasher;
 import be.ucll.chappl.users.application.UserCommandHandler;
 import be.ucll.chappl.users.commands.RegisterUserCommand;
 import be.ucll.chappl.users.infrastructure.InMemoryUserRepository;
@@ -23,7 +24,7 @@ class GroupCommandHandlerTest {
         var recipesRepo = new InMemoryRecipeRepository();
         var groupsRepo = new InMemoryGroupRepository();
 
-        var userCommands = new UserCommandHandler(usersRepo);
+        var userCommands = new UserCommandHandler(usersRepo, new FakePasswordHasher());
         var recipeCommands = new RecipeCommandHandler(recipesRepo);
 
         var groupCommands = new GroupCommandHandler(groupsRepo, usersRepo, recipesRepo);
@@ -54,7 +55,7 @@ class GroupCommandHandlerTest {
         var recipesRepo = new InMemoryRecipeRepository();
         var groupsRepo = new InMemoryGroupRepository();
 
-        var userCommands = new UserCommandHandler(usersRepo);
+        var userCommands = new UserCommandHandler(usersRepo, new FakePasswordHasher());
         var recipeCommands = new RecipeCommandHandler(recipesRepo);
 
         var groupCommands = new GroupCommandHandler(groupsRepo, usersRepo, recipesRepo);

@@ -4,6 +4,7 @@ import be.ucll.chappl.leftovers.application.LeftoverCommandHandler;
 import be.ucll.chappl.leftovers.application.LeftoverQueryHandler;
 import be.ucll.chappl.leftovers.commands.AddLeftoverCommand;
 import be.ucll.chappl.leftovers.infrastructure.InMemoryLeftoverRepository;
+import be.ucll.chappl.unit.support.FakePasswordHasher;
 import be.ucll.chappl.users.application.UserCommandHandler;
 import be.ucll.chappl.users.commands.RegisterUserCommand;
 import be.ucll.chappl.users.infrastructure.InMemoryUserRepository;
@@ -37,7 +38,7 @@ class LeftoverCommandHandlerTest {
         var usersRepo = new InMemoryUserRepository();
         var leftoversRepo = new InMemoryLeftoverRepository();
 
-        var userHandler = new UserCommandHandler(usersRepo);
+        var userHandler = new UserCommandHandler(usersRepo, new FakePasswordHasher());
         var user = userHandler.handle(new RegisterUserCommand("stefanie", "stefanie@ucll.be", "pw"));
 
         var commands = new LeftoverCommandHandler(leftoversRepo, usersRepo);
